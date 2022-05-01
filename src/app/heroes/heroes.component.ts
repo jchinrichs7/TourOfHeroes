@@ -3,6 +3,8 @@ import { Hero } from '../hero';
 import { HEROES } from '../mock-heroes';
 import { HeroService } from '../hero.service';
 import { MessageService } from '../message.service';
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-heroes',
@@ -13,13 +15,7 @@ import { MessageService } from '../message.service';
 
 export class HeroesComponent implements OnInit {
   
-  selectedHero?: Hero;
   heroes: Hero[] = [];
-
-  onSelect(hero: Hero): void {
-    this.selectedHero = hero;
-    this.messageService.add(`HeroesComponent: Selected hero id=${hero.id}`);
-  }
 
   //this version of getHeroes is asyncronous
   getHeroes(): void {
@@ -27,10 +23,22 @@ export class HeroesComponent implements OnInit {
       .subscribe(heroes => this.heroes = heroes); //this line break is unncecessary. we're doing Observable.subscribe()
   }
 
-  constructor(private heroService: HeroService, private messageService: MessageService) {}
+  constructor(
+    private heroService: HeroService, //get hero data from remote server
+    private route: ActivatedRoute, //holds info abt the route (ie. id)
+    private location: Location //browser navigation
+  ) {}
 
   ngOnInit(): void {
     this.getHeroes();
   }
 
 }
+
+/*
+Previously, the parent HeroesComponent set the HeroDetailComponent.hero property and the 
+HeroDetailComponent displayed the hero.
+
+HeroesComponent doesn't do that anymore. Now the router creates the 
+HeroDetailComponent in response to a URL such as ~/detail/11.
+*/
