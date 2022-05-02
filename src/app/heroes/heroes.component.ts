@@ -2,9 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Hero } from '../hero';
 import { HEROES } from '../mock-heroes';
 import { HeroService } from '../hero.service';
-import { MessageService } from '../message.service';
-import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-heroes',
@@ -23,11 +20,16 @@ export class HeroesComponent implements OnInit {
       .subscribe(heroes => this.heroes = heroes); //this line break is unncecessary. we're doing Observable.subscribe()
   }
 
-  constructor(
-    private heroService: HeroService, //get hero data from remote server
-    private route: ActivatedRoute, //holds info abt the route (ie. id)
-    private location: Location //browser navigation
-  ) {}
+  add(name: string): void {
+    name = name.trim();
+    if (!name) { return; }
+    this.heroService.addHero({ name } as Hero)
+      .subscribe(hero => {
+        this.heroes.push(hero);
+      });
+  }
+
+  constructor(private heroService: HeroService) {}
 
   ngOnInit(): void {
     this.getHeroes();
