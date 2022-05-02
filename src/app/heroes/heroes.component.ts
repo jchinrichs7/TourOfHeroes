@@ -35,7 +35,7 @@ export class HeroesComponent implements OnInit {
     this.getHeroes();
   }
 
-}
+} 
 
 /*
 Previously, the parent HeroesComponent set the HeroDetailComponent.hero property and the 
